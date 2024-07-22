@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReservaYa</title>
+
+    <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- estilos locales -->
+    <link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body class="bg-[#0F1522]">
+
+    <div class="flex h-screen">
+        <!-- sidebar -->
+        <aside class="border-r w-64 border-slate-600">
+
+            <nav class="flex-1 overflow-hidden hover:overflow-y-auto pt-8">
+                <ul class="p-2 overflow-hidden">
+                    <li>
+                        <a href="home_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Principal
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reservas_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Reservas
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="habitaciones_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Habitaciones
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tipo_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Tipo de Habitación
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="ofertas_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Ofertas
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="detalle_owner.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Detalle
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html">
+                            <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                <img src="principal.png" class="w-[1.3rem] h-[1.3rem]" alt="">
+                                <span class="w-full size-[1.5rem] text-white">
+                                    Cerrar Sesión
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+
+        </aside>
+
+        <div class="flex flex-col flex-1 h-full overflow-hidden">
+
+            <!-- main -->
+            <main class="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
+                
+                <!-- nuevo hotel -->
+                <section class="w-full pt-10">
+                    <div class="w-[50%] mx-auto">
+                        <h3 class="text-slate-300 text-center mt-3 text-4xl mb-10">
+                            Habitaciones
+                        </h3>
+                        <form method="post" action="">
+                            
+                            <div class="flex gap-1">
+                                <input type="text" name="codigo" placeholder="Código" class="block w-full px-3 mt-3 py-1 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                                <select name="tipo" class="block w-full px-3 mt-3 py-1 bg-[#0F1522] border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                                    <option value="1">Opcion 1</option>
+                                    <option value="1">Opcion 1</option>
+                                    <option value="1">Opcion 1</option>
+                                    <option value="1">Opcion 1</option>
+                                </select>                            
+                            </div>
+                            
+                            <div class="flex gap-1">
+                                <input type="text" name="capacidad" placeholder="Capacidad" class="block w-full px-3 mt-3 py-1 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                                <input type="text" name="precio" placeholder="Precio por noche" class="block w-full px-3 mt-3 py-1 bg-transparent border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                            </div>
+                            <div class="flex gap-1">
+                                <div id="selectedAmenities" class="w-[50%] h-[10rem] mt-3 py-1 bg-transparent border border-slate-500 text-white">
+                                    <!-- Comodidades seleccionadas se mostrarán aquí -->
+                                </div>
+                                <div class="w-[50%]">                                    
+                                    <select id="amenities" class="block w-full px-3 mt-3 py-1 bg-[#0F1522] border border-slate-500 focus:outline-none focus:right-0 text-[#CBD5E1]">
+                                        <option value="wifi">WiFi</option>
+                                        <option value="tv">Televisión</option>
+                                        <option value="ac">Aire Acondicionado</option>
+                                        <option value="minibar">Minibar</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="submit" value="Guardar" class="px-5 py-2 rounded-md mt-3 cursor-pointer text-white bg-slate-600">
+
+                        </form>
+                    </div>
+                </section>
+            </main>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const amenitiesSelect = document.getElementById('amenities');
+            amenitiesSelect.addEventListener('change', function() {
+            const selectedAmenitiesContainer = document.getElementById('selectedAmenities');
+            const selectedOption = amenitiesSelect.options[amenitiesSelect.selectedIndex];
+            
+            // Verifica si la opción ya está seleccionada
+            if (!document.getElementById(`selected-${selectedOption.value}`)) {
+                const selectedDiv = document.createElement('div');
+                selectedDiv.id = `selected-${selectedOption.value}`;
+                selectedDiv.className = 'inline-block px-2 rounded-full bg-gray-500 ml-1 mb-1';
+                selectedDiv.innerHTML = `
+                <span>${selectedOption.textContent}</span>
+                <button type="button" class="text-black ml-2" onclick="removeAmenity('${selectedOption.value}')">X</button>
+                <input type="hidden" name="selectedAmenities[]" value="${selectedOption.value}">
+                `;
+                selectedAmenitiesContainer.appendChild(selectedDiv);
+            }
+            });
+        });
+
+        function removeAmenity(value) {
+            const amenityDiv = document.getElementById(`selected-${value}`);
+            if (amenityDiv) {
+            amenityDiv.remove();
+            }
+        }
+    </script>
+
+</body>
+</html>

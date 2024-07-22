@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReservaYa</title>
+
+    <!-- tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- estilos locales -->
+    <link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body class="bg-[#0F1522]">
+
+    <!-- component -->
+    <div>
+        <div class="flex h-screen overflow-y-hidden bg-[#0F1522]" x-data="setup()" x-init="$refs.loading.classList.add('hidden')">
+            <!-- Loading screen -->
+            <div
+                x-ref="loading"
+                class="fixed inset-0 z-50 flex items-center justify-center text-white bg-black bg-opacity-50"
+                style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px)"
+            >
+                Loading.....
+            </div>
+
+            <!-- Sidebar backdrop -->
+            <div
+                x-show.in.out.opacity="isSidebarOpen"
+                class="fixed inset-0 z-10 bg-black bg-opacity-20 lg:hidden"
+                style="backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px)"
+            ></div>
+
+            <!-- Sidebar -->
+            <aside
+                x-transition:enter="transition transform duration-300"
+                x-transition:enter-start="-translate-x-full opacity-30  ease-in"
+                x-transition:enter-end="translate-x-0 opacity-100 ease-out"
+                x-transition:leave="transition transform duration-300"
+                x-transition:leave-start="translate-x-0 opacity-100 ease-out"
+                x-transition:leave-end="-translate-x-full opacity-0 ease-in"
+                class="fixed inset-y-0 z-10 flex flex-col flex-shrink-0 w-64 max-h-screen overflow-hidden transition-all transform bg-[#0F1522] border-r border-slate-600 shadow-lg lg:z-auto lg:static lg:shadow-none"
+                :class="{'-translate-x-full lg:translate-x-0 lg:w-20': !isSidebarOpen}"
+            >
+                <!-- sidebar header -->
+                <div class="flex items-center justify-between flex-shrink-0 p-2" :class="{'lg:justify-center': !isSidebarOpen}">
+                    <a href="index.html" class="py-[.8rem]">
+                        <span class="p-2 text-gray-300 text-2xl font-semibold leading-8 tracking-wider whitespace-nowrap">
+                            R<span :class="{'lg:hidden': !isSidebarOpen}">eservaYa</span>
+                        </span>
+                    </a>
+                    
+                    <button @click="toggleSidbarMenu()" class="p-2 rounded-md lg:hidden">
+                        <svg
+                            class="w-6 h-6 text-gray-600"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            >
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>              
+                </div>
+
+                <!-- Sidebar links -->
+                <nav class="flex-1 overflow-hidden hover:overflow-y-auto pt-6">
+                    <ul class="p-2 overflow-hidden">                        
+                        <li>
+                            <a href="reservas_cliente.html">
+                                <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b border-t border-slate-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                        class="bi bi-calendar-check size-[1.3rem] text-[#CBD5E1]" viewBox="0 0 16 16">
+                                        <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                    </svg>
+                                    <span :class="{ 'lg:hidden': !isSidebarOpen }" class="size-[1.5rem] text-[#CBD5E1]">Reservas</span>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li>
+                            <a href="favoritos_cliente.html">
+                                <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b  border-slate-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                    class="bi bi-heart-fill size-[1.3rem] text-[#CBD5E1]" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                                    </svg>
+                                    <span :class="{ 'lg:hidden': !isSidebarOpen }" class="size-[1.5rem] text-[#CBD5E1]">Favoritos</span>
+                                </div>
+                            </a>                           
+                        </li>
+                        <li>
+                            <a href="ofertas_cliente.html">
+                                <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b  border-slate-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                        class="bi bi-calendar4-event size-[1.3rem] text-[#CBD5E1]" viewBox="0 0 16 16">
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1z"/>
+                                        <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                    <span :class="{ 'lg:hidden': !isSidebarOpen }" class="size-[1.5rem] text-[#CBD5E1]">Ofertas</span>
+                                </div>
+                            </a>                            
+                        </li>
+                        <li>
+                            <a href="index.html">
+                                <div class="px-5 py-4 flex items-center space-x-5 hover:bg-[#1F2634] cursor-pointer border-b  border-slate-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                        class="bi bi-box-arrow-in-right size-[1.3rem] text-[#CBD5E1]" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+                                        <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                    </svg>
+                                    <span :class="{ 'lg:hidden': !isSidebarOpen }" class="w-full size-[1.5rem] text-[#CBD5E1]">Cerrar sesión</span>
+                                </div>
+                            </a>               
+                        </li>
+                        <!-- Sidebar Links... -->
+                    </ul>
+                </nav>
+            </aside>
+
+            <div class="flex flex-col flex-1 h-full overflow-hidden">
+                <!-- Navbar -->
+                <header class="flex-shrink-0 border-b border-slate-700">
+                    <div class="pr-5 py-[.8rem] border-b border-slate-700 lg:pr-20 flex justify-between">
+                        <!-- Navbar left -->
+                        <div class="flex items-center justify-between space-x-3">
+                            <a href="index.html" class="p-2 text-gray-300 text-xl font-semibold tracking-wider uppercase lg:hidden">RY</a>
+                            <!-- Toggle sidebar button -->
+                            <button @click="toggleSidbarMenu()" class="p-2 rounded-md focus:outline-none focus:ring">
+                                <svg
+                                    class="w-4 h-4 text-gray-600"
+                                    :class="{'transform transition-transform -rotate-180': isSidebarOpen}"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    >
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                                </svg>
+                            </button>                            
+                        </div>
+                        <div class="flex  items-center space-x-2 lg:space-x-10 gap-3">
+                            <div>
+                                <a href="buscar.html">
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-[1.5rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer"
+                                >
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
+                                </a>
+                            </div>
+                            <a href="perfil_cliente.html" class="flex gap-1 text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer">
+                                <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                                class="size-[1.5rem]"
+                                >
+                                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Arias</span>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <!-- Main content -->
+                <main class="flex-1 max-h-full p-5 overflow-hidden overflow-y-scroll">
+                    
+                    <!-- reservas -->
+                    <section class="px-5 lg:px-20">
+
+                        <h2 class="text-gray-400 py-3 pb-10 text-center text-xl lg:text-2xl font-semibold">Historial de Reservas</h2>
+
+                    
+                        <div class="flex flex-wrap items-center justify-around gap-5">
+                            
+                            <!-- card -->
+                            <div class="w-[18rem] lg:w-full bg-[#8F9EB31C] rounded-md mb-5 lg:mx- lg:flex lg:p-5">
+
+                                <div class="lg:w-80% lg:flex"> 
+                                    <img class="w-full lg:rounded-none lg:w-[12rem] h-[12rem] rounded-t-md object-cover object-center" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                    <div class="p-4 lg:py-0 lg:flex w-full justify-between">
+                                        <div class="space-y-1">
+                                            <a href="hotel.html" class="font-semibold text-lg text-white">
+                                                Hotel Presidencial
+                                            </a>
+                                            <div class="flex gap-5 py-1">
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-facebook size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-instagram size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-geo-alt size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <p class="text-gray-500 text-sm">
+                                                El Alto, La Paz, Bolivia
+                                            </p>
+                                            <h4 class="text-[#CBD5E1] font-semibold text-base">
+                                                Habitacion estandar
+                                            </h4>
+                                            <p class="text-[#F4B848] text-sm font-bold">
+                                                Bs. 150
+                                            </p>
+                                            <div class="lg:flex lg:gap-3 lg:flex-wrap text-sm">
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-300 text-sm tracking-widest">
+                                                Del 21 de junio al 30 de junio
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lg:w-[20%] lg:flex lg:flex-col lg:justify-between mx-auto">
+                                    <p class="text-gray-500 text-sm text-center">
+                                        150-6-3422
+                                    </p>
+                                    <span class="block w-fit mx-auto bg-[#c640f7] rounded-full my-2 lg:my-0 py-1 lg:py-0 px-3 text-white">
+                                        Completado
+                                    </span>
+                                </div>
+
+                            </div>
+                            
+                            <!-- card -->
+                            <div class="w-[18rem] lg:w-full bg-[#8F9EB31C] rounded-md mb-5 lg:mx-36 lg:flex lg:p-5">
+
+                                <div class="lg:w-80% lg:flex"> 
+                                    <img class="w-full lg:rounded-none lg:w-[12rem] h-[12rem] rounded-t-md object-cover object-center" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                    <div class="p-4 lg:py-0 lg:flex w-full justify-between">
+                                        <div class="space-y-1">
+                                            <a href="hotel.html" class="font-semibold text-lg text-white">
+                                                Hotel Presidencial
+                                            </a>
+                                            <div class="flex gap-5 py-1">
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-facebook size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-instagram size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+                                                    </svg>
+                                                </a>
+                                                <a href="#">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                                                        class="bi bi-geo-alt size-[1.3rem] text-[#8F9EB3] hover:text-[#CBD5E1] cursor-pointer" viewBox="0 0 16 16">
+                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            <p class="text-gray-500 text-sm">
+                                                El Alto, La Paz, Bolivia
+                                            </p>
+                                            <h4 class="text-[#CBD5E1] font-semibold text-base">
+                                                Habitacion estandar
+                                            </h4>
+                                            <p class="text-[#F4B848] text-sm font-bold">
+                                                Bs. 150
+                                            </p>
+                                            <div class="lg:flex lg:gap-3 lg:flex-wrap text-sm">
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <img class="w-[1rem] h-[1rem]" src="https://imgservice.alojamiento.io/500x245/hyatt-place-manati-pr-manati-bc-901390-0.jpg" alt="">
+                                                    <span class="text-[#8F9EB3]">
+                                                        Wi-Fi
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-300 text-sm tracking-widest">
+                                                Del 21 de junio al 30 de junio
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lg:w-[20%] lg:flex lg:flex-col lg:justify-between mx-auto">
+                                    <p class="text-gray-500 text-sm text-center">
+                                        150-6-3422
+                                    </p>
+                                    <span class="block w-fit mx-auto bg-[#45DD5E] rounded-full my-2 lg:my-0 py-1 lg:py-0 px-3 text-white">
+                                        Reservado
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <!-- dashboard -->
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js" defer></script>
+        
+        <script>
+            let valor=false;
+            if (window.innerWidth >= 1024) { 
+                    valor = true;
+            } else {
+                valor = false;
+            }
+        
+            const setup = () => {
+                return {
+                loading: true,
+                isSidebarOpen: valor,
+                toggleSidbarMenu() {
+                    this.isSidebarOpen = !this.isSidebarOpen
+                },
+                isSettingsPanelOpen: false,
+                isSearchBoxOpen: false,
+                }
+            }
+        </script>
+    </div>
+
+</body>
+</html>
